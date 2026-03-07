@@ -1,210 +1,109 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React from "react";
 import { motion } from "framer-motion";
 
-// 1. Define the Project Interface (This fixes the ESLint error)
 interface Project {
     title: string;
     description: string;
     image: string;
     tags: string[];
-    width: string;
-    align: string;
-    speed: number;
 }
 
-// Project Assets
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
-import project4 from "@/assets/project-4.jpg";
-import project5 from "@/assets/project-5.jpg";
-import project6 from "@/assets/project-6.jpg";
+import project1 from "@/assets/img-1.png";
+import project2 from "@/assets/img-2.png";
+import project3 from "@/assets/img-3.png";
+import project4 from "@/assets/img-4.png";
+import project5 from "@/assets/img-5.png";
+import project6 from "@/assets/img-6.png";
 
-// 2. Apply the Type to the array
 const projects: Project[] = [
     {
-        title: "MONOLITH",
-        description: "Luxury Residencies",
+        title: "NOPAL",
+        description: "Designing the future of sustainable agriculture",
         image: project1,
-        tags: ["Architecture", "3D", "2024"],
-        width: "w-full md:w-[65%]",
-        align: "justify-start",
-        speed: 1,
+        tags: ["Architecture", "2024"],
     },
     {
-        title: "AXIOM",
-        description: "Digital Ecosystem",
+        title: "TIERRA VIVA",
+        description: "Breathing new life into an organic market",
         image: project2,
-        tags: ["Product", "UI/UX", "2024"],
-        width: "w-full md:w-[40%]",
-        align: "justify-end",
-        speed: 1.2,
+        tags: ["Branding", "2024"],
     },
     {
-        title: "AETHER",
-        description: "Visual Identity",
+        title: "CASA NOMAD",
+        description: "Weaving artisan stories into a global brand",
         image: project3,
-        tags: ["Branding", "Motion", "2023"],
-        width: "w-full md:w-[80%]",
-        align: "justify-center",
-        speed: 0.9,
+        tags: ["Interior", "2023"],
     },
     {
-        title: "FRAGMENT",
-        description: "Editorial Archive",
+        title: "ALBA",
+        description: "Crafting a sanctuary of minimalism and nature",
         image: project4,
-        tags: ["Print", "Design", "2023"],
-        width: "w-full md:w-[45%]",
-        align: "justify-start",
-        speed: 1.1,
+        tags: ["Digital", "2023"],
     },
     {
         title: "OBSIDIAN",
-        description: "Creative Direction",
+        description: "Creative direction for modern brands",
         image: project5,
-        tags: ["Photography", "Web", "2023"],
-        width: "w-full md:w-[50%]",
-        align: "justify-end",
-        speed: 1,
+        tags: ["Creative", "2023"],
     },
     {
         title: "SYNTIX",
-        description: "Next-Gen SaaS",
+        description: "Interface for next-gen SaaS platforms",
         image: project6,
-        tags: ["Tech", "Interface", "2022"],
-        width: "w-full md:w-[70%]",
-        align: "justify-center",
-        speed: 0.85,
+        tags: ["Product", "2022"],
     },
 ];
 
-// 3. Update ProjectCard props to use the 'Project' type instead of 'any'
-const ProjectCard = ({
-    project,
-    index,
-}: {
-    project: Project;
-    index: number;
-}) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const imageRef = useRef<HTMLImageElement>(null);
-    const revealRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Reveal Animation
-            gsap.fromTo(
-                revealRef.current,
-                { clipPath: "inset(100% 0 0 0)" },
-                {
-                    clipPath: "inset(0% 0 0 0)",
-                    duration: 1.5,
-                    ease: "power4.inOut",
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: "top 85%",
-                    },
-                },
-            );
-
-            // Parallax
-            gsap.to(imageRef.current, {
-                yPercent: 15,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true,
-                },
-            });
-        }, containerRef);
-        return () => ctx.revert();
-    }, []);
-
-    const projectNumber = String(index + 1).padStart(2, "0");
-
+const ProjectCard = ({ project }: { project: Project }) => {
     return (
-        <div
-            ref={containerRef}
-            className={`flex w-full mb-32 md:mb-64 ${project.align}`}>
-            <div className={`${project.width} group`}>
-                <div
-                    ref={revealRef}
-                    className="relative overflow-hidden aspect-[16/10] bg-zinc-900">
-                    <img
-                        ref={imageRef}
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-[120%] object-cover absolute top-[-10%] transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-500" />
-                </div>
-
-                <div className="mt-6 flex flex-col md:flex-row justify-between items-start gap-4">
-                    <div className="flex gap-4">
-                        <span className="mono-text text-zinc-600 mt-1">
-                            {projectNumber}
-                        </span>
-                        <div>
-                            <h3 className="project-title leading-none">
-                                {project.title}{" "}
-                                <span className="font-light text-zinc-500 ml-2">
-                                    | {project.description}
-                                </span>
-                            </h3>
-                            <div className="flex gap-3 mt-3">
-                                {project.tags.map((tag) => (
-                                    <span
-                                        key={tag}
-                                        className="tag border-zinc-800">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    <motion.button
-                        whileHover={{ x: 5 }}
-                        className="mono-text text-[10px] border-b border-zinc-800 pb-1 hover:text-white transition-colors">
-                        View Case Study
-                    </motion.button>
-                </div>
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="group"
+        >
+            {/* Image Container - Natural colors, no grayscale, no scale effect */}
+            <div className="relative aspect-[4/5] overflow-hidden bg-zinc-900 mb-6">
+                <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                />
             </div>
-        </div>
+
+            {/* Project Info */}
+            <div className="flex flex-col space-y-1">
+                <h3 className="text-sm font-bold tracking-widest uppercase">
+                    {project.title}
+                </h3>
+                <p className="text-zinc-500 text-sm leading-relaxed">
+                    {project.description}
+                </p>
+            </div>
+        </motion.div>
     );
 };
 
 const WorkGrid = () => {
     return (
-        <section id="work" className="px-6 md:px-12 py-20 bg-background">
-            <div className="max-w-[1800px] mx-auto">
-                <div className="mb-32 flex flex-col md:flex-row md:items-end justify-between border-b border-zinc-900 pb-12">
-                    <div className="max-w-2xl">
-                        <span className="mono-text text-zinc-500 block mb-4 uppercase">
-                            Selected Works 24/25
-                        </span>
-                        <h2 className="section-heading">
-                            Crafting structural <br /> digital narratives.
-                        </h2>
-                    </div>
-                    <div className="mt-8 md:mt-0">
-                        <p className="mono-text text-zinc-600 max-w-[240px] text-right">
-                            Focused on high-fidelity visual systems and motion.
-                        </p>
-                    </div>
+        <section id="work" className="px-6 md:px-12 py-24 bg-background">
+            <div className="max-w-[1400px] mx-auto">
+
+                {/* Header Section */}
+                <div className="flex justify-between items-end border-b border-zinc-900 pb-8 mb-16">
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tighter uppercase">
+                        Selected Works
+                    </h2>
+                    <span className="text-[10px] text-zinc-500 uppercase tracking-widest cursor-pointer hover:text-white transition-colors">
+                        See all works
+                    </span>
                 </div>
 
-                <div className="flex flex-col">
-                    {projects.map((project, index) => (
-                        <ProjectCard
-                            key={project.title}
-                            project={project}
-                            index={index}
-                        />
+                {/* The Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+                    {projects.map((project) => (
+                        <ProjectCard key={project.title} project={project} />
                     ))}
                 </div>
             </div>
