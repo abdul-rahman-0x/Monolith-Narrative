@@ -53,7 +53,7 @@ src/
 
 ## 05 / Project Lead
 
-**[Abdul Rahman](https://github.com/ABDUL-RAHMAN-9)**  
+**[Abdul Rahman](https://github.com/abdul-rahman-0x)**  
 *Bridging the gap between structural brutalism and digital fluidity.*
 
 > "Engineering is not just about making things work; it is about building systems that are resilient, type-safe, and inherently scalable from the first line of code."
